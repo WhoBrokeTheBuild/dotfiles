@@ -65,3 +65,8 @@ fi
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
+
+eval $(thefuck --alias)
+alias dnf='sudo dnf'
+
+[[ -s "/home/slanewalsh/.gvm/scripts/gvm" ]] && source "/home/slanewalsh/.gvm/scripts/gvm"
