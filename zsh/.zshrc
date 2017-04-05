@@ -34,7 +34,7 @@ HYPHEN_INSENSITIVE="true"
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 
-plugins=(git dnf github sudo)
+plugins=(git svn systemd archlinux dnf docker github sudo cp)
 
 command_exists () {
     type "$1" &> /dev/null ;
@@ -51,12 +51,7 @@ if [ -e "$HOME/.zshrc.local" ]; then
     source $HOME/.zshrc.local
 fi
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+export EDITOR='vim'
 
 if command_exists clang; then
     export CC=clang
@@ -66,7 +61,13 @@ fi
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 
-eval $(thefuck --alias)
+if command_exists thefuck; then
+	eval $(thefuck --alias)
+fi
+
 alias dnf='sudo dnf'
+alias apt='sudo apt'
+alias pacman='sudo pacman'
+alias vi='vim'
 
 [[ -s "/home/slanewalsh/.gvm/scripts/gvm" ]] && source "/home/slanewalsh/.gvm/scripts/gvm"
