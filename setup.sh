@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-sh i3/setup.sh
-sh vim/setup.sh
-sh zsh/setup.sh
-sh tmux/setup.sh
+./i3/setup.sh
+./vim/setup.sh
+./zsh/setup.sh
+./tmux/setup.sh
