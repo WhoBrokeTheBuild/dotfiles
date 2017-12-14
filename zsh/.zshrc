@@ -42,7 +42,7 @@ command_exists () {
 
 # User configuration
 
-export PATH="/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:~/go/bin:~/.local/bin:~/bin:~/go/bin"
+export PATH="$PATH:~/go/bin:~/.local/bin:~/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
