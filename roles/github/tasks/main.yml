@@ -1,0 +1,31 @@
+---
+
+- name: "Get GitHub Public Keys"
+  uri:
+    url: "https://api.github.com/user/keys"
+    user: "{{ github_user }}"
+    password: "{{ github_pass }}"
+    force_basic_auth: True
+    return_content: True
+  register: github_keys_out
+
+- set_fact:
+    github_keys: []
+
+- set_fact:
+    github_keys: "{{ github_keys }} + [ '{{ item.key }}' ]"
+  with_items: "{{ github_keys_out.content | from_json }}"
+
+- name: "Add Public Key to GitHub"
+  uri:
+    url: "https://api.github.com/user/keys"
+    user: "{{ github_user }}"
+    password: "{{ github_pass }}"
+    force_basic_auth: True
+    method: "POST"
+    status_code: 201
+    body_format: "json"
+    body:
+      title: "{{ ansible_user_id }}@{{ ansible_hostname }}"
+      key: "{{ public_key }}"
+  when: "public_key not in github_keys"

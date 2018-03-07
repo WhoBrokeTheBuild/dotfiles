@@ -1,0 +1,75 @@
+---
+
+# Ubuntu
+
+- name: "Update (apt)"
+  become: True
+  apt:
+    update_cache: True
+    upgrade: True
+    autoclean: True
+    autoremove: True
+  when: "ansible_os_family == 'Debian'"
+
+# Fedora
+
+- name: "Update (dnf)"
+  become: True
+  dnf:
+    name: '*'
+    state: latest
+  when: "ansible_distribution == 'Fedora'"
+
+- name: "Enable Rawhide Repository (dnf)"
+  become: True
+  dnf:
+    name: "fedora-repos-rawhide"
+    state: latest
+  when: "ansible_distribution == 'Fedora'"
+
+- name: "Enable RPM-Fusion Repositories (dnf)"
+  become: True
+  dnf:
+    name: "{{ item }}"
+    state: "present"
+  with_items:
+    - http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-27.noarch.rpm
+    - http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-27.noarch.rpm
+  when: "ansible_distribution == 'Fedora'"
+
+# Arch
+
+- name: "Update (pacman)"
+  become: True
+  pacman:
+    update_cache: True
+    upgrade: True
+  when: "ansible_os_family == 'Archlinux'"
+
+- name: "Install yaourt"
+  script: "install-yaourt.sh"
+  when: "ansible_os_family == 'Archlinux'"
+
+- name: "Copy yaourt configuration"
+  copy:
+    src: "/etc/yaourtrc"
+    dest: "/home/{{ ansible_user_id }}/.yaourtrc"
+  when: "ansible_os_family == 'Archlinux'"
+
+- name: "Disable yaourt build prompts"
+  lineinfile:
+    dest: "/home/{{ ansible_user_id }}/.yaourtrc"
+    regexp: '^#\s*BUILD_NOCONFIRM.*$'
+    line: 'BUILD_NOCONFIRM=1'
+  when: "ansible_os_family == 'Archlinux'"
+
+- name: "Disable yaourt edit prompts"
+  lineinfile:
+    dest: "/home/{{ ansible_user_id }}/.yaourtrc"
+    regexp: '^#\s*EDITFILES.*$'
+    line: 'EDITFILES=0'
+  when: "ansible_os_family == 'Archlinux'"
+
+- name: "Update (yaourt)"
+  shell: "yaourt -Syu --devel --aur"
+  when: "ansible_os_family == 'Archlinux'"

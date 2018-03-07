@@ -1,0 +1,36 @@
+---
+
+# Ubuntu
+
+- name: "Add clang repository (apt)"
+  become: True
+  copy:
+    dest: "/etc/apt/sources.list.d/clang.list"
+    content: |
+        deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-6.0 main
+        deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-6.0 main
+  when: "ansible_os_family == 'Debian'"
+
+- name: "Install clang (apt)"
+  become: True
+  apt:
+    name: "clang-6"
+    state: "latest"
+    update_cache: True
+  when: "ansible_os_family == 'Debian'"
+
+# Fedora
+
+- name: "Install clang (dnf)"
+  become: True
+  dnf:
+    name: "clang"
+    state: "latest"
+    enablerepo: "rawhide"
+  when: "ansible_distribution == 'Fedora'"
+
+# Arch
+
+- name: "Install clang (yaourt)"
+  shell: "yaourt -S clang-svn"
+  when: "ansible_os_family == 'Archlinux'"

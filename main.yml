@@ -1,0 +1,105 @@
+---
+
+- hosts: localhost
+  gather_facts: True
+  tags:
+    - always
+
+- hosts: localhost
+  gather_facts: False
+  roles:
+    - role: update
+  tags:
+    - update
+
+- hosts: localhost
+  gather_facts: False
+  roles:
+    - role: tools
+  tags:
+    - tools
+
+- hosts: localhost
+  gather_facts: False
+  roles:
+    - role: ssh-key
+  tags:
+    - ssh-key
+
+- hosts: localhost
+  gather_facts: False
+  roles:
+    - role: zsh
+  tags:
+    - zsh
+
+- hosts: localhost
+  gather_facts: False
+  roles:
+    - role: vim
+  tags:
+    - vim
+
+- hosts: localhost
+  gather_facts: False
+  roles:
+    - role: google-chrome
+  tags:
+    - google-chrome
+
+- hosts: localhost
+  gather_facts: False
+  roles:
+    - role: virtualbox
+  tags:
+    - virtualbox
+
+- hosts: localhost
+  gather_facts: False
+  roles:
+    - role: atom
+  tags:
+    - atom
+
+- hosts: localhost
+  gather_facts: False
+  become: True
+  tasks:
+    - name: "Create /opt/repos directory"
+      file:
+        dest: "/opt/repos"
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
+        mode: "0755"
+        state: "directory"
+  tags:
+    - opt-repos
+
+- hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: "Set Git Config"
+      shell: >
+        git config --global user.name "Stephen Lane-Walsh" &&
+        git config --global user.email "sdl.slane@gmail.com" &&
+        git config --global core.editor /usr/bin/vim &&
+        git config --global push.default simple
+  tags:
+    - git-config
+
+
+- hosts: localhost
+  gather_facts: False
+  roles:
+    - role: github
+  vars_prompt:
+    - name: "github_user"
+      prompt: "\n GitHub Username"
+      private: no
+    - name: "github_pass"
+      prompt: "\n GitHub Password"
+      private: yes
+  vars:
+      public_key: "{{ lookup('pipe', 'cat /home/{{ ansible_user_id }}/.ssh/id_rsa.pub | cut -d\" \" -f3 --complement') }}"
+  tags:
+    - github

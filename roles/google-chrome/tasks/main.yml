@@ -1,0 +1,25 @@
+---
+
+# Ubuntu
+
+- name: "Install Google Chrome (apt)"
+  become: True
+  apt:
+    deb: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+    state: "present"
+  when: "ansible_os_family == 'Debian'"
+
+# Fedora
+
+- name: "Install Google Chrome (dnf)"
+  become: True
+  dnf:
+    name: "https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm"
+    state: "present"
+  when: "ansible_distribution == 'Fedora'"
+
+# Arch
+
+- name: "Install Google Chrome (yaourt)"
+  shell: "yaourt -S google-chrome"
+  when: "ansible_os_family == 'Archlinux'"

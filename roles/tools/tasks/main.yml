@@ -1,0 +1,100 @@
+---
+
+# Ubuntu
+
+- name: "Install tools (apt)"
+  become: True
+  apt:
+    name: "{{ item }}"
+    state: "latest"
+  with_items:
+    - git
+    - make
+    - cmake
+    - patch
+    - linux-headers-generic
+    - dkms
+    - gcc
+    - valgrind
+    - socat
+    - jq
+    - htop
+    - mlocate
+    - vlc
+    - qemu
+    - libvirt-bin
+    - virt-manager
+    - golang-1.9
+    - python-pip
+    - python3-pip
+  when: "ansible_os_family == 'Debian'"
+
+# Fedora
+
+- name: "Install tools (dnf)"
+  become: True
+  dnf:
+    name: "{{ item }}"
+    state: "latest"
+  with_items:
+    - git
+    - make
+    - cmake
+    - patch
+    - kernel-headers
+    - kernel-devel
+    - dkms
+    - gcc
+    - valgrind
+    - socat
+    - jq
+    - htop
+    - mlocate
+    - vlc
+    - qemu
+    - libvirt
+    - virt-manager
+    - golang-bin
+    - python-pip
+    - python3
+  when: "ansible_distribution == 'Fedora'"
+
+# Arch
+
+- name: "Install tools (pacman)"
+  become: True
+  pacman:
+    name: "{{ item }}"
+    state: "latest"
+  with_items:
+    - git
+    - make
+    - cmake
+    - patch
+    - linux-headers
+    - dkms
+    - gcc
+    - valgrind
+    - socat
+    - jq
+    - htop
+    - mlocate
+    - vlc
+    - qemu
+    - libvirt
+    - virt-manager
+    - go
+    - go-tools
+    - python2-pip
+    - python-pip
+  when: "ansible_os_family == 'Archlinux'"
+
+# Terraform
+
+- name: "Install Terraform"
+  become: True
+  unarchive:
+    src: "https://releases.hashicorp.com/terraform/0.11.3/terraform_0.11.3_linux_amd64.zip"
+    remote_src: True
+    dest: "/usr/local/bin/"
+    mode: 0774

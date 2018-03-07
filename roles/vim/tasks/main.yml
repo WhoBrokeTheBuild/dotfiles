@@ -1,0 +1,37 @@
+---
+
+- name: "Install vim (apt)"
+  become: True
+  apt:
+    name: "vim"
+    state: "latest"
+  when: "ansible_os_family == 'Debian'"
+
+- name: "Install vim (dnf)"
+  become: True
+  dnf:
+    name: "vim"
+    state: "latest"
+  when: "ansible_distribution == 'Fedora'"
+
+- name: "Install vim (pacman)"
+  become: True
+  pacman:
+    name: "vim"
+    state: "latest"
+  when: "ansible_os_family == 'Archlinux'"
+
+- name: "Install vim configuration"
+  copy:
+    src: ".vimrc"
+    dest: "/home/{{ ansible_user_id }}/.vimrc"
+
+- name: "Create .vim directory"
+  file:
+    dest: "/home/{{ ansible_user_id }}/.vim"
+    state: "directory"
+
+- name: "Copy vim themes"
+  copy:
+    src: "colors"
+    dest: "/home/{{ ansible_user_id }}/.vim/"

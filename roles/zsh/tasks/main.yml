@@ -1,0 +1,54 @@
+---
+
+# Ubuntu
+
+- name: "Install ZSH (apt)"
+  become: True
+  apt:
+    name: "zsh"
+    state: "latest"
+  when: "ansible_os_family == 'Debian'"
+
+# Fedora
+
+- name: "Install ZSH (dnf)"
+  become: True
+  dnf:
+    name: "{{ item }}"
+    state: "latest"
+  with_items:
+    - libselinux-python
+    - zsh
+  when: "ansible_distribution == 'Fedora'"
+
+# Arch
+
+- name: "Install Zsh (pacman)"
+  become: True
+  pacman:
+    name: "zsh"
+    state: "latest"
+  when: "ansible_os_family == 'Archlinux'"
+
+# Oh-My-Zsh
+
+- name: "Download Oh-My-Zsh install.sh"
+  get_url:
+    url: "https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh"
+    dest: "/tmp/oh-my-zsh-install.sh"
+    mode: 0755
+
+- name: "Run Oh-My-Zsh install.sh"
+  script: "/tmp/oh-my-zsh-install.sh"
+
+- name: "Install Zsh configuration"
+  copy:
+    src: ".zshrc"
+    dest: "/home/{{ ansible_user_id }}/.zshrc"
+
+- name: "Set Zsh as the default shell"
+  become: True
+  user:
+    name: "{{ ansible_user_id }}"
+    state: present
+    shell: "/usr/bin/zsh"
