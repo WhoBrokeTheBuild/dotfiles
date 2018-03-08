@@ -1,5 +1,20 @@
 ---
 
+- name: "Check if Google Chrome is Installed (apt, dnf)"
+  shell: "type google-play-music-desktop-player"
+  failed_when: False
+  register: check_gpmdp
+  when: "ansible_os_family == 'Debian' or ansible_distribution == 'Fedora'"
+
+- name: "Check if Google Chrome is Installed (yaourt)"
+  shell: "type gpmdp"
+  failed_when: False
+  register: check_gpmdp
+  when: "ansible_os_family == 'Archlinux'"
+
+- meta: end_play
+  when: "check_chrome.rc == 0"
+
 # Ubuntu
 
 - name: "Install Google Play Music (apt)"

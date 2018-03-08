@@ -1,5 +1,13 @@
 ---
 
+- name: "Check if Google Chrome is Installed"
+  shell: "type google-chrome-stable"
+  failed_when: False
+  register: check_chrome
+
+- meta: end_play
+  when: "check_chrome.rc == 0"
+
 # Ubuntu
 
 - name: "Install Google Chrome (apt)"
@@ -21,5 +29,5 @@
 # Arch
 
 - name: "Install Google Chrome (yaourt)"
-  shell: "yaourt -S google-chrome"
+  shell: "yaourt --noconfirm -S google-chrome"
   when: "ansible_os_family == 'Archlinux'"

@@ -1,7 +1,8 @@
 ---
 
-- name: "Check if docker is installed"
+- name: "Check if Docker is Installed"
   shell: "type docker"
+  failed_when: False
   register: check_docker
 
 - meta: end_play
@@ -64,7 +65,7 @@
 
 - name: "Install Docker (pacman)"
   become: True
-  dnf:
+  pacman:
     name: "docker"
     state: "latest"
   when: "ansible_os_family == 'Archlinux'"

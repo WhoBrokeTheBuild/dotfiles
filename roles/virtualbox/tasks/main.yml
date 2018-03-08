@@ -1,5 +1,13 @@
 ---
 
+- name: "Check if VirtualBox is Installed"
+  shell: "type virtualbox"
+  failed_when: False
+  register: check_virtualbox
+
+- meta: end_play
+  when: "check_virtualbox.rc == 0"
+
 # Ubuntu
 
 - name: "Install VirtualBox (apt)"

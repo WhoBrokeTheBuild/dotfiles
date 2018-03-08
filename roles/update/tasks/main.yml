@@ -71,5 +71,5 @@
   when: "ansible_os_family == 'Archlinux'"
 
 - name: "Update (yaourt)"
-  shell: "yaourt -Syu --devel --aur"
+  shell: "yaourt --noconfirm -Syu --devel --aur"
   when: "ansible_os_family == 'Archlinux'"

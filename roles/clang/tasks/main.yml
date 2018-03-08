@@ -32,5 +32,5 @@
 # Arch
 
 - name: "Install clang (yaourt)"
-  shell: "yaourt -S clang-svn"
+  shell: "yaourt --noconfirm -S clang-svn"
   when: "ansible_os_family == 'Archlinux'"
