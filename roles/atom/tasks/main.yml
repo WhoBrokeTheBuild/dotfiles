@@ -31,7 +31,7 @@
 
 - name: "Install atom plugins"
   shell: >
-    apm install -y autocomplete-clang build build-cmake build-make git-plus go-plus
+    apm install -y autocomplete-clang busy-signal build build-cmake build-make git-plus go-plus
     language-batch language-cmake language-flatbuffers language-glsl language-hlsl
     language-jenkinsfile language-lua language-luajit language-powershell language-terraform
     minimap switch-header-source teletype power-mode vim-mode-plus

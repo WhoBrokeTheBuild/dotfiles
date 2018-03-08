@@ -63,6 +63,13 @@
 
 - hosts: localhost
   gather_facts: False
+  roles:
+    - role: docker
+  tags:
+    - docker
+
+- hosts: localhost
+  gather_facts: False
   become: True
   tasks:
     - name: "Create /opt/repos directory"

@@ -1,0 +1,76 @@
+---
+
+- name: "Check if docker is installed"
+  shell: "type docker"
+  register: check_docker
+
+- meta: end_play
+  when: "check_docker.rc == 0"
+
+# Ubuntu
+
+- name: "Add Docker Key (apt)"
+  become: True
+  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  when: "ansible_os_family == 'Debian'"
+
+- name: "Get Release Name"
+  shell: "lsb_release"
+  register: lsb_release_out
+  when: "ansible_os_family == 'Debian'"
+
+- name: "Add Docker Repository (apt)"
+  become: True
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ lsb_release_out.stdout }} stable"
+  when: "ansible_os_family == 'Debian'"
+
+- name: "Install Docker (apt)"
+  become: True
+  apt:
+    name: "{{ item }}"
+    update_cache: True
+    state: "present"
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - software-properties-common
+    - docker
+  when: "ansible_os_family == 'Debian'"
+
+# Fedora
+
+- name: "Install Dependencies (dnf)"
+  become: True
+  dnf:
+    name: "dnf-plugins-core"
+    state: "latest"
+  when: "ansible_distribution == 'Fedora'"
+
+- name: "Add Docker Repository (dnf)"
+  become: True
+  shell: "dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo"
+  when: "ansible_distribution == 'Fedora'"
+
+- name: "Install Docker (dnf)"
+  become: True
+  dnf:
+    name: "docker-ce"
+    state: "latest"
+    enablerepo: "docker-ce-edge"
+  when: "ansible_distribution == 'Fedora'"
+
+# Arch
+
+- name: "Install Docker (pacman)"
+  become: True
+  dnf:
+    name: "docker"
+    state: "latest"
+  when: "ansible_os_family == 'Archlinux'"
+
+# Configuration
+
+- name: "Add user to Docker group"
+  become: True
+  shell: usermod -a -G docker {{ ansible_user_id }}
