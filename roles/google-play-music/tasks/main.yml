@@ -1,0 +1,25 @@
+---
+
+# Ubuntu
+
+- name: "Install Google Play Music (apt)"
+  become: True
+  apt:
+    deb: "https://github-production-release-asset-2e65be.s3.amazonaws.com/40008106/5bedc5e4-0621-11e8-8fc0-1dcec3a16f2f?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20180308%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20180308T165027Z&X-Amz-Expires=300&X-Amz-Signature=9f4f220e264d11053a80c9c80503ac79b66f75f3876b07ca92d18c2bf7e5d2e7&X-Amz-SignedHeaders=host&actor_id=993663&response-content-disposition=attachment%3B%20filename%3Dgoogle-play-music-desktop-player_4.5.0_amd64.deb&response-content-type=application%2Foctet-stream"
+    state: "latest"
+  when: "ansible_os_family == 'Debian'"
+
+# Fedora
+
+- name: "Install Google Play Music (dnf)"
+  become: True
+  dnf:
+    name: "https://github-production-release-asset-2e65be.s3.amazonaws.com/40008106/5bedc5e4-0621-11e8-8fc0-1dcec3a16f2f?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20180308%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20180308T165027Z&X-Amz-Expires=300&X-Amz-Signature=9f4f220e264d11053a80c9c80503ac79b66f75f3876b07ca92d18c2bf7e5d2e7&X-Amz-SignedHeaders=host&actor_id=993663&response-content-disposition=attachment%3B%20filename%3Dgoogle-play-music-desktop-player_4.5.0_amd64.deb&response-content-type=application%2Foctet-stream"
+    state: "latest"
+  when: "ansible_distribution == 'Fedora'"
+
+# Arch
+
+- name: "Install Google Play Music (yaourt)"
+  shell: "yaourt -S gpmdp"
+  when: "ansible_os_family == 'Archlinux'"
